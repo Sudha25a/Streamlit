@@ -12,12 +12,8 @@ st.markdown("Analyzing Bitcoin price trends using recent data.")
 
 def get_data():
     """Fetch Bitcoin price data from the database."""
+    dbconn = st.secrets["DBCONN"]
 
-    # Try to get the DB connection string from Streamlit secrets, fallback to environment variable
-    try:
-        dbconn = st.secrets["DBCONN"]
-    except Exception:
-        dbconn = os.environ.get("DBCONN", "dbname=your_db user=your_user password=your_pass host=localhost port=5432")
 
     # Connect to the PostgreSQL database
     with psycopg.connect(dbconn) as conn:
