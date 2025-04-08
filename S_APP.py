@@ -1,7 +1,6 @@
 import streamlit as st
 import psycopg
 import pandas as pd
-import plotly.express as px
 
 # Streamlit page config
 st.set_page_config(page_title="Bitcoin Analysis", layout="wide")
@@ -30,18 +29,18 @@ def get_data():
 BTC_Data = get_data()
 st.dataframe(BTC_Data)
 
-# Line chart of closing prices
-st.subheader("📊 Closing Price Over Time")
-fig_close = px.line(BTC_Data, x='Date', y='Close', title="Bitcoin Closing Price")
-st.plotly_chart(fig_close, use_container_width=True)
+# # Line chart of closing prices
+# st.subheader("📊 Closing Price Over Time")
+# fig_close = px.line(BTC_Data, x='Date', y='Close', title="Bitcoin Closing Price")
+# st.plotly_chart(fig_close, use_container_width=True)
 
 # Moving Average
 st.subheader("🧮 Moving Average")
 window = st.slider("Select Moving Average Window (Days):", 2, 14, 5)
 BTC_Data['MA'] = BTC_Data['Close'].rolling(window=window).mean()
 
-fig_ma = px.line(BTC_Data, x='Date', y=['Close', 'MA'], title=f"Bitcoin with {window}-Day Moving Average")
-st.plotly_chart(fig_ma, use_container_width=True)
+# fig_ma = px.line(BTC_Data, x='Date', y=['Close', 'MA'], title=f"Bitcoin with {window}-Day Moving Average")
+# st.plotly_chart(fig_ma, use_container_width=True)
 
 # Summary statistics
 st.subheader("📋 Summary Statistics")
