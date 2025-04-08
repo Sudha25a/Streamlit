@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import psycopg
+# import psycopg
 
 # Streamlit page config
 st.set_page_config(page_title="Bitcoin Analysis", layout="wide")
