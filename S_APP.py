@@ -18,7 +18,6 @@ def get_data():
     try:
         dbconn = st.secrets["DBCONN"]
     except Exception:
-        st.warning("Using fallback DB connection string from environment variable.")
         dbconn = os.environ.get("DBCONN", "dbname=your_db user=your_user password=your_pass host=localhost port=5432")
 
     # Connect to the PostgreSQL database
