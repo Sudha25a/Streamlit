@@ -32,28 +32,28 @@ def get_data():
     return data_df
 
 # Fetch and display data
-df = get_data()
-st.dataframe(df)
+BTC_Data = get_data()
+st.dataframe(BTC_Data)
 
 # Line chart of closing prices
 st.subheader("📊 Closing Price Over Time")
-fig_close = px.line(df, x='Date', y='Close', title="Bitcoin Closing Price")
+fig_close = px.line(BTC_Data, x='Date', y='Close', title="Bitcoin Closing Price")
 st.plotly_chart(fig_close, use_container_width=True)
 
 # Moving Average
 st.subheader("🧮 Moving Average")
 window = st.slider("Select Moving Average Window (Days):", 2, 14, 5)
-df['MA'] = df['Close'].rolling(window=window).mean()
+BTC_Data['MA'] = BTC_Data['Close'].rolling(window=window).mean()
 
-fig_ma = px.line(df, x='Date', y=['Close', 'MA'], title=f"Bitcoin with {window}-Day Moving Average")
+fig_ma = px.line(BTC_Data, x='Date', y=['Close', 'MA'], title=f"Bitcoin with {window}-Day Moving Average")
 st.plotly_chart(fig_ma, use_container_width=True)
 
 # Summary statistics
 st.subheader("📋 Summary Statistics")
-st.write(df['Close'].describe())
+st.write(BTC_Data['Close'].describe())
 
 # High/Low metrics
 st.subheader("📌 Key Metrics")
 col1, col2 = st.columns(2)
-col1.metric("🔺 Highest Price", f"${df['High'].max():,.2f}")
-col2.metric("🔻 Lowest Price", f"${df['Low'].min():,.2f}")
+col1.metric("🔺 Highest Price", f"${BTC_Data['High'].max():,.2f}")
+col2.metric("🔻 Lowest Price", f"${BTC_Data['Low'].min():,.2f}")
