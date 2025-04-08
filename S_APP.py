@@ -1,7 +1,6 @@
 import streamlit as st
 import psycopg
 import pandas as pd
-import os
 import plotly.express as px
 
 # Streamlit page config
