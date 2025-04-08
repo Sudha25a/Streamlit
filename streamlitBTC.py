@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import psycopg
+import yfinance as yf
 
 # Streamlit page config
 st.set_page_config(page_title="Bitcoin Analysis", layout="wide")
@@ -9,23 +9,23 @@ st.set_page_config(page_title="Bitcoin Analysis", layout="wide")
 st.title("📈 Bitcoin Price Analysis")
 st.markdown("Analyzing Bitcoin price trends using recent data.")
 
-# Load data (assumes btc_price_last_month.csv is in the same GitHub repo)
+# Function to fetch the latest Bitcoin data from Yahoo Finance
 @st.cache_data
 def load_data():
-    df = pd.read_csv("btc_price_last_month.csv")
+    # Download historical Bitcoin price data from Yahoo Finance
+    df = yf.download('BTC-USD', period="30d", interval="1d")  # Fetch the last 30 days of data
+    df.reset_index(inplace=True)  # Reset index to make 'Date' a column
+    df.rename(columns={
+        'Date': 'Date',
+        'Open': 'Open',
+        'High': 'High',
+        'Low': 'Low',
+        'Close': 'Close',
+        'Volume': 'Volume'
+    }, inplace=True)
     return df
 
 df = load_data()
-
-# Rename columns for consistency
-df = df.rename(columns={
-    'date': 'Date',
-    '1. open': 'Open',
-    '2. high': 'High',
-    '3. low': 'Low',
-    '4. close': 'Close',
-    '5. volume': 'Volume'
-})
 
 # Show raw data
 with st.expander("📄 Show Raw Data"):

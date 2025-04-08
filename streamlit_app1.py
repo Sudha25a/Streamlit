@@ -1,32 +1,42 @@
-import streamlit as st  
-import psycopg
-import pandas as pd
+import streamlit as st
+import psycopg2  # or the appropriate DB connector library
 
+def get_data(city):
+    # Ensure the secrets file is correctly loaded
+    try:
+        dbconn = st.secrets["DBCONN"]
+        # Example of using the database connection string or individual values
+        conn = psycopg2.connect(
+            host=dbconn["host"],
+            user=dbconn["username"],
+            password=dbconn["password"],
+            database=dbconn["database"]
+        )
+        cursor = conn.cursor()
+        
+        # Your logic for fetching data from the database
+        query = f"SELECT * FROM weather WHERE city = '{city}'"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        
+        # Return the weather data (or any data from your DB)
+        return result
 
-st.write("hello world!!!!")
+    except KeyError as e:
+        st.error(f"Missing secret: {e}")
+        return None
+    except Exception as e:
+        st.error(f"An error occurred while connecting to the database: {e}")
+        return None
+    finally:
+        # Always close the DB connection
+        if conn:
+            conn.close()
 
-st.title("this is a title")
+# Streamlit app code to get city and fetch data
+city = st.text_input("Enter the city name:")
 
-st.divider()
-
-city = st.selectbox(
-    "Select a city",
-    ("Berlin", "London", "Sydney"),
-)
-
-st.write("You selected:", city)
-
-def get_data(selected_city):
-    dbconn = st.secrets["DBCONN"]
-    conn = psycopg.connect(dbconn)
-    cur = conn.cursor()
-    cur.execute('''
-        SELECT * FROM weather_data WHERE city = %s;
-    ''', (selected_city,))
-    data = cur.fetchall()
-    data_df = pd.DataFrame(data, columns=["date", "city", "temp", "feels", "description"])
-    return data_df
-    
-weather_data = get_data(city)
-# print(weather_data)
-st.dataframe(weather_data)
+if city:
+    weather_data = get_data(city)
+    if weather_data:
+        st.write("Weather Data:", weather_data)
